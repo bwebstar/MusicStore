@@ -1,0 +1,52 @@
+﻿@model IEnumerable<MvcMusicStore.Models.Album>
+
+@{
+    ViewBag.Title = "Store";
+}
+
+<div class="row">
+    <div class="col-md-3">
+        @{Html.RenderAction("GenreMenu", "Store");}
+    </div>
+    <div class="col-md-9">
+
+            <h1>Browse Albums</h1>
+            <p>There are currently @Model.Count() albums in our collection.</p>
+            <h3>Artist search</h3>
+
+            <form id="artistSearch" method="get" action="@Url.Action("ArtistSearch", "Store")">
+                <input type="text" name="q" data-autocomplete-source="@Url.Action("QuickSearch", "Store")" />
+                <input type="submit" value="search" />
+                <img id="ajax-loader" src="@Url.Content("~/Content/Images/ajax-loader.gif")" style="display:none" />
+            </form>
+
+            <script id="artistTemplate" type="text/html">
+                <ul>
+                    {{#artists}}
+                    <li>{{Name}}</li>
+                    {{/artists}}
+                </ul>
+            </script>
+
+            <div id="searchresults"></div>
+
+            <ul id="album-list">
+                @foreach (var album in Model)
+                {
+                    <li>
+                        <a href="@Url.Action("Details", new { id = album.AlbumId })">
+                            <img alt="@album.Title" src="@album.AlbumArtUrl" height="200px" width="200px" /><br />
+                            @album.Title
+                        </a>
+                    </li>
+                }
+            </ul>
+
+        </div>
+   </div>
+
+@section Scripts
+    {
+    <script src="~/Scripts/App/MusicScripts.js"></script>
+    <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+}
